@@ -17,34 +17,51 @@ const { GraphQLServer } = require('graphql-yoga')
  * https://www.howtographql.com/graphql-js/2-a-simple-query/
  */
 
-// 1
 const typeDefs = `
 type Query {
-    users: [User!]!
-    user(id: ID!): User
+    info: String!
+    feed: [Link!]!
 }
 
-type Mutation {
-    createUser(name: String!): User!
-}
-
-type User {
+type Link {
     id: ID!
-    name: String!
+    description: String!
+    url: String!
 }
 `
 
-// 2
+/**
+ * virtually all fields on the types in a GraphQL schema have
+ * resolver functions.
+ */
+
+// 1
+let links = [
+  {
+    id: 'link-0',
+    url: 'www.howtographql.com',
+    description: 'Fullstack tutorial for GraphQL'
+  }
+]
+
 const resolvers = {
-    Query: {
-        info: () => null,
-    },
+  Query: {
+    info: () => `This is the API of a Hackernews Clone`,
+    // 2
+    feed: () => links
+  },
+  // 3
+  Link: {
+    id: parent => parent.id,
+    description: parent => parent.description,
+    url: parent => parent.url
+  }
 }
 
 // 3
 const server = new GraphQLServer({
-    typeDefs,
-    resolvers,
+  typeDefs,
+  resolvers
 })
 
 /**
