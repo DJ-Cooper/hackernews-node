@@ -11,57 +11,48 @@ const { GraphQLServer } = require('graphql-yoga')
  *
  * When querying an object type, required to query at
  * least one of its fields
- *
- * milestone: completed "Getting Started"
- * on to "A Simple Query"
- * https://www.howtographql.com/graphql-js/2-a-simple-query/
  */
-
-const typeDefs = `
-type Query {
-    info: String!
-    feed: [Link!]!
-}
-
-type Link {
-    id: ID!
-    description: String!
-    url: String!
-}
-`
 
 /**
  * virtually all fields on the types in a GraphQL schema have
  * resolver functions.
  */
 
-// 1
 let links = [
-  {
-    id: 'link-0',
-    url: 'www.howtographql.com',
-    description: 'Fullstack tutorial for GraphQL'
-  }
+    {
+        id: 'link-0',
+        url: 'www.howtographql.com',
+        description: 'Fullstack tutorial for GraphQL',
+    },
 ]
 
+let idCount = links.length
+
 const resolvers = {
-  Query: {
-    info: () => `This is the API of a Hackernews Clone`,
-    // 2
-    feed: () => links
-  },
-  // 3
-  Link: {
-    id: parent => parent.id,
-    description: parent => parent.description,
-    url: parent => parent.url
-  }
+    Query: {
+        info: () => `This is the API of a Hackernews Clone`,
+        // 2
+        feed: () => links,
+    },
+    Mutation: {
+        post: (parent, args) => {
+            const link = {
+                id: `link-${idCount++}`,
+                description: args.description,
+                url: args.url,
+            }
+            links.push(link)
+            return link
+        },
+    },
+    // Link resolvers removed because server infers
+    // what they look like
 }
 
 // 3
 const server = new GraphQLServer({
-  typeDefs,
-  resolvers
+    typeDefs: './src/schema.graphql',
+    resolvers,
 })
 
 /**

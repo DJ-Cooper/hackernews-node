@@ -1,0 +1,27 @@
+PROCESS:
+1. Extend GraphQL schema definition with a new root field
+    (and data types)
+2. Implement resolver functions for added fields 
+
+typeDefs
+defines GraphQL schema
+
+resolvers
+implementation of GraphQL schema
+
+Every resolver function receives 4 input args.
+    parent: result of previous resolver execution level
+        (nested curly brace levels)
+
+On the first level, invokes 'feed' resolver & returns
+data stored in 'links'. For 2nd level, server invokes 
+resolvers of Link type, inferred from schema.
+Because the implementation of Link resolvers is trivial,
+they can be omitted.
+
+The implementation of the 'post' resolver first creates
+a new 'link' object, then adds it to the existing 
+'links' list and final returns the new link.
+
+Milestone: completed "A Simple Mutation"
+Next chapter: "Adding a Database"
