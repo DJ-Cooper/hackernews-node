@@ -1,3 +1,6 @@
+Milestone: completed "Adding a Database"
+Next chapter: "Connect Server + DB with Prisma Client"
+
 PROCESS:
 1. Extend GraphQL schema definition with a new root field
     (and data types)
@@ -23,5 +26,35 @@ The implementation of the 'post' resolver first creates
 a new 'link' object, then adds it to the existing 
 'links' list and final returns the new link.
 
-Milestone: completed "A Simple Mutation"
-Next chapter: "Adding a Database"
+prisma.yml
+main config for prisma setup
+
+datamodel.prisma
+definition of datamodel, each model mapped to table
+in underlying database.
+
+Because Prisma uses GraphQL SDL for model definitions,
+you can basically copy the existing Link definition from
+schema.graphql into datamodel.prisma.
+
+@id 
+This means Prisma will auto-generate and store globally unique IDs 
+
+@createdAt
+read-only in API, stores time for when specific Link was created. 
+
+>>>> yarn global add prisma <<<<<<<<<<<<<
+prisma deploy
+prisma generate
+
+The last step is to generate the Prisma client for your datamodel. 
+The Prisma client is an auto-generated client library that lets you 
+read and write data in the database through Prisma API. You can 
+generate it using the prisma generate command. This command reads
+the information from prisma.yml and generates the Prisma client
+accordingly.
+
+The Prisma client is now generated and located in 
+hackernews-node/src/generated/prisma-client .
+To use the client, you can import the prisma instance that's exported
+from the generated folder.
